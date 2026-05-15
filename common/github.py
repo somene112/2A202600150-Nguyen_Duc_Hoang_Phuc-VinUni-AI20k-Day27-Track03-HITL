@@ -106,4 +106,11 @@ def post_review_comment(pr_url: str, body: str) -> None:
     url = f"{API}/repos/{owner}/{repo}/issues/{number}/comments"
     with httpx.Client(timeout=30.0) as client:
         resp = client.post(url, headers=_headers(), json={"body": body})
-        resp.raise_for_status()
+        try:
+            resp.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            detail = resp.text[:500]
+            raise RuntimeError(
+                f"GitHub comment post failed: HTTP {resp.status_code} {exc.response.reason_phrase}. "
+                f"Response: {detail}"
+            ) from exc

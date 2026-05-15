@@ -214,7 +214,7 @@ def _render_comment_body(state) -> str:
 def _post(state) -> str:
     try:
         post_review_comment(state["pr_url"], _render_comment_body(state))
-        console.print(f"  [green]OK[/green] posted comment to {state['pr_url']}")
+        console.print(f"  [green]POSTED[/green] GitHub PR comment to {state['pr_url']}")
         return "committed"
     except Exception as e:
         console.print(f"  [red]FAIL[/red] post failed: {e}")
